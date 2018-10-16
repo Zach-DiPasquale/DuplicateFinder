@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Validity - Take Home Problem</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p><strong>Duplicates</strong></p>
+    <tr th:each="entry: ${duplicates}">
+        <td th:text="${entry.getCsv()}" />
+        </br>
+    </tr>
+
+    <p><strong>Non Duplicates</strong></p>
+    <tr th:each="entry: ${goodEntries}">
+        <td th:text="${entry.getCsv()}" />
+        </br>
+    </tr>
+</body>
+</html>
