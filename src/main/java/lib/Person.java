@@ -3,7 +3,7 @@ package lib;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.lang3.StringUtils;
 
-public class Person {
+public class Person implements Comparable<Person> {
 
     private Integer csvId;
 
@@ -97,5 +97,10 @@ public class Person {
         }
 
         return false;
+    }
+
+    @Override
+    public int compareTo(Person p) {
+        return this.csvId - p.csvId;
     }
 }

@@ -14,47 +14,34 @@ public class FindDuplicates {
 
     @GetMapping("/")
     public String index(Model model) {
-        ArrayList<Person> duplicates = new ArrayList<>();
-        ArrayList<Person> goodEntries = new ArrayList<>();
-        model.addAttribute("duplicates", duplicates);
-        model.addAttribute("goodEntries", goodEntries);
-        HashMap<Integer, Person> entries = new HashMap<>();
+
+        List<Person> goodEntries;
 
         try {
-            entries = ReadCSV.readCSV();
+            goodEntries = ReadCSV.readCSV();
         } catch (Exception e) {
             System.out.println(e);
+            goodEntries = new ArrayList<>();
         }
 
-        Set<Integer> goodEntriesSet = new HashSet<>(entries.keySet());
-        Set<Integer> duplicatesSet = new HashSet<>();
 
-        for (int i = 0; i <= 100; i++) {
-            if(!entries.containsKey(i)) {
-                continue;
-            }
-            for (int j = i+1; j <= 100; j++) {
-                if(!entries.containsKey(j)) {
-                    continue;
-                }
+        Set<Person> duplicateSet = DuplicateFinder.findDuplicates(goodEntries);
 
-                if (entries.get(i).isDuplicate(entries.get(j))) {
-                    duplicatesSet.add(i);
-                    duplicatesSet.add(j);
-                    goodEntriesSet.remove(i);
-                    goodEntriesSet.remove(j);
-                    break;
-                }
+        Set<Person> goodEntriesSet = new HashSet<>(goodEntries);
 
+        for (Person p : duplicateSet) {
+            if (goodEntries.contains(p)){
+                goodEntries.remove(p);
             }
         }
-        for (Integer i : duplicatesSet) {
-            duplicates.add(entries.get(i));
-        }
 
-        for (Integer i : goodEntriesSet) {
-            goodEntries.add(entries.get(i));
-        }
+        ArrayList<Person> duplicates = new ArrayList<>(duplicateSet);
+
+        model.addAttribute("goodEntries", goodEntries);
+        List<Person> lp = new ArrayList<>(duplicateSet);
+        Collections.sort(lp);
+        model.addAttribute("duplicates", lp);
+
 
         return "index";
     }
